@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <title>Responsive Page</title>
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="row mb-3">
+      <div class="col text-center">
+        <button id="chatBtn" class="btn btn-primary mr-2">Chat</button>
+        <button id="vozBtn" class="btn btn-secondary">Voz</button>
+      </div>
+    </div>
+    <div id="chatSection" class="d-none">
+      <div class="row mb-3">
+        <div class="col text-center">
+          <button id="whatsappBtn" class="btn btn-primary mr-2">WhatsApp</button>
+          <button id="googleBtn" class="btn btn-secondary">Google</button>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <textarea id="chatInput1" class="form-control auto-expand"></textarea>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col button-group">
+          <button id="chatPasteBtn1" class="btn btn-warning">Pegar</button>
+          <button id="talkButton" class="btn btn-danger">Hablar</button>
+          <button id="stopButton" class="btn btn-danger hidden">Detener</button>
+          <button id="chatCopyBtn1" class="btn btn-success">Copiar</button>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <textarea id="chatInput2" class="form-control auto-expand"></textarea>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col button-group">
+          <button id="chatPasteBtn2" class="btn btn-warning">Pegar</button>
+          <button id="chatVoiceBtn1" class="btn btn-danger">Hablar</button>
+          <button id="chatCopyBtn2" class="btn btn-success">Copiar</button>
+        </div>
+      </div>
+    </div>
+    <div id="vozSection" class="d-none">
+      <div class="row mb-3">
+        <div class="col">
+          <textarea id="vozInput1" class="form-control" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col text-center">
+          <button class="btn btn-warning">Escuchar</button>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col text-center">
+          <button class="btn btn-danger">Hablar</button>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <textarea id="vozInput2" class="form-control" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col text-center">
+          <button id="vozCopyBtn2" class="btn btn-success">Copiar</button>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <textarea id="vozInput3" class="form-control" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="scripts.js"></script>
+</body>
+</html>

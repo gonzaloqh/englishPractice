@@ -1,0 +1,34 @@
+body {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.button-group {
+    display: flex;
+    flex-flow: column;
+    gap: 10px;
+}
+
+.button-group button {
+    flex: 1;
+    margin: 0 5px;
+}
+
+textarea {
+    width: 100%;
+}
+
+.auto-expand {
+    box-sizing: border-box;
+    /* Asegura que el padding y el border se incluyan en el width */
+    overflow: hidden;
+    /* Evita que aparezca una barra de desplazamiento */
+    min-height: 50px;
+    /* Establece una altura mínima */
+    resize: none;
+    /* Evita el redimensionamiento manual */
+}
+
+.btn.hidden {
+    display: none;
+}
