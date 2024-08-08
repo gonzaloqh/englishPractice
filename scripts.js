@@ -5,6 +5,9 @@ document.getElementById('chatBtn').addEventListener('click', function() {
     this.classList.remove('btn-secondary');
     document.getElementById('vozBtn').classList.remove('btn-primary');
     document.getElementById('vozBtn').classList.add('btn-secondary');
+
+    this.classList.add('btn-primary');
+    this.classList.remove('btn-secondary');
   });
   
   document.getElementById('vozBtn').addEventListener('click', function() {
@@ -16,20 +19,21 @@ document.getElementById('chatBtn').addEventListener('click', function() {
     document.getElementById('chatBtn').classList.add('btn-secondary');
   });
   
-  document.getElementById('whatsappBtn').addEventListener('click', function() {
-    this.classList.add('btn-primary');
-    this.classList.remove('btn-secondary');
-    document.getElementById('googleBtn').classList.remove('btn-primary');
-    document.getElementById('googleBtn').classList.add('btn-secondary');
-  });
   
-  document.getElementById('googleBtn').addEventListener('click', function() {
-    this.classList.add('btn-primary');
-    this.classList.remove('btn-secondary');
-    document.getElementById('whatsappBtn').classList.remove('btn-primary');
-    document.getElementById('whatsappBtn').classList.add('btn-secondary');
+  document.getElementById('chatInputText1').addEventListener('input', function() {
+      // Obtener el contenido actual del textarea con id="chatInput1"
+      const chatInput1 = document.getElementById('chatInput1');
+      let jsonString = chatInput1.value;
+
+      // Encontrar el índice del campo "my_response"
+      const myResponsePattern = /("my_response":\s*")(.*?)(?=")/;
+      const updatedString = jsonString.replace(myResponsePattern, `$1${this.value.replace(/"/g, '\\"')}`);
+
+      // Actualizar el contenido del textarea con id="chatInput1"
+      chatInput1.value = updatedString;
+      autoExpand(chatInput1);
   });
-  
+
   function copyToClipboard(textAreaId) {
     const textArea = document.getElementById(textAreaId);
     textArea.select();
@@ -268,17 +272,8 @@ if ('webkitSpeechRecognition' in window) {
         chatInputText1.value = finalTranscript;
         autoExpand(chatInputText1);
 
-          // Obtener el contenido actual del textarea con id="chatInput1"
-          const chatInput1 = document.getElementById('chatInput1');
-          let jsonString = chatInput1.value;
-
-          // Encontrar el índice del campo "my_response"
-          const myResponsePattern = /("my_response":\s*")(.*?)(?=")/;
-          const updatedString = jsonString.replace(myResponsePattern, `$1${finalTranscript.replace(/"/g, '\\"')}`);
-
-          // Actualizar el contenido del textarea con id="chatInput1"
-          chatInput1.value = updatedString;
-          autoExpand(chatInput1);
+        const event = new Event('input');
+        chatInputText1.dispatchEvent(event);
       }
   };
 
