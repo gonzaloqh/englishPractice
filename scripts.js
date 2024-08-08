@@ -40,7 +40,7 @@ document.getElementById('chatBtn').addEventListener('click', function() {
     "messages": [], #Mensajes enviados por el emisor en español, ordenados
     "messages_english": "", # Traducción al inglés de los mensajes del emisor
     "my_response": "",  # Mi respuesta en inglés a los mensajes del emisor
-    "observations": "",  # Reformulación formal de mi respuesta corregida en Ingles 
+    "observations": "",  # Reformulación formal de mi respuesta corregida en Ingles, puedes cambiar algunas palabras según tu criterio para mejorar fluidez y/o vocabulario 
     "explanation": "",  # Explicaciones de los errores principales corregidos haciendo enfasis en gramatica y redacción
     "spanish_response": "" # Transcripción del campo 'observations' al español
   }`;
@@ -103,7 +103,7 @@ document.getElementById('chatCopyBtn1').addEventListener('click', function() {
 
   document.getElementById('chatCopyBtn2').addEventListener('click', function() {
     // Obtener el contenido del textarea
-    const textareaContent = document.getElementById('chatInput2').value;
+    const textareaContent = document.getElementById('chatInput4').value;
   
     // Buscar la línea que comienza con 'Spanish Response:'
     const spanishResponseMatch = textareaContent.match(/^Spanish Response: (.*)$/m);
@@ -127,7 +127,7 @@ document.getElementById('chatCopyBtn1').addEventListener('click', function() {
 
   document.getElementById('chatVoiceBtn1').addEventListener('click', function() {
     // Obtener el contenido del textarea
-    const textareaContent = document.getElementById('chatInput2').value;
+    const textareaContent = document.getElementById('chatInput3').value;
   
     // Buscar la línea que comienza con 'Observations:'
     const observationsMatch = textareaContent.match(/^Observations: (.*)$/m);
@@ -170,17 +170,36 @@ document.getElementById('chatCopyBtn1').addEventListener('click', function() {
         const spanishResponse = data.spanish_response || '';
   
         // Construir el contenido a mostrar
-        const content = `
+        const content1 = `
 Messages in English: ${messagesEnglish}
-My Response: ${myResponse}
-Observations: ${observations}
-Explanation: ${explanation}
-Spanish Response: ${spanishResponse}
         `;
+
+        const content2 = `
+My Response: ${myResponse}
+
+Observations: ${observations}
+
+Explanation: ${explanation}
+                `;
+  
+                
+                const content3 = `
+Spanish Response: ${spanishResponse}
+                        `;
+                  
   
         // Mostrar el contenido en el textarea con id "chatInput2"
-        document.getElementById('chatInput2').value = content;
+        document.getElementById('chatInput2').value = content1;
         autoExpand(document.getElementById('chatInput2'));
+
+        document.getElementById('chatInput3').value = content2;
+        autoExpand(document.getElementById('chatInput3'));
+
+        document.getElementById('chatInput4').value = content3;
+        autoExpand(document.getElementById('chatInput4'));
+
+
+
 
       } catch (error) {
         console.error('Error parsing JSON from clipboard:', error);
@@ -207,51 +226,68 @@ function autoExpand(textarea) {
     textarea.style.height = textarea.scrollHeight + 'px';
 }
 
-  // Verifica si el navegador soporta la API de reconocimiento de voz
-  if ('webkitSpeechRecognition' in window) {
-    const recognition = new webkitSpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = false;
-    recognition.lang = 'en-US'; // Cambia el idioma según sea necesario
+if ('webkitSpeechRecognition' in window) {
+  const recognition = new webkitSpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = false;
+  recognition.lang = 'en-US';
 
-    const talkButton = document.getElementById('talkButton');
-    const stopButton = document.getElementById('stopButton');
-    const chatInput2 = document.getElementById('chatInput2');
+  const talkButton = document.getElementById('talkButton');
+  const stopButton = document.getElementById('stopButton');
+  let finalTranscript = '';
 
-    talkButton.addEventListener('click', () => {
-        talkButton.classList.add('hidden');
-        stopButton.classList.remove('hidden');
-        recognition.start();
-    });
+  talkButton.addEventListener('click', () => {
+      finalTranscript = ''; // Reinicia el transcript final
+      talkButton.classList.add('hidden');
+      stopButton.classList.remove('hidden');
+      recognition.start();
+  });
 
-    stopButton.addEventListener('click', () => {
-        stopButton.classList.add('hidden');
-        talkButton.classList.remove('hidden');
-        recognition.stop();
-    });
+  stopButton.addEventListener('click', () => {
+      stopButton.classList.add('hidden');
+      talkButton.classList.remove('hidden');
+      recognition.stop();
+  });
 
-    recognition.onresult = (event) => {
-        // Obtener la transcripción del evento de voz
-        const transcript = event.results[0][0].transcript;
-    
-        // Obtener el contenido actual del textarea con id="chatInput1"
-        const chatInput1 = document.getElementById('chatInput1');
-        let jsonString = chatInput1.value;
-    
-        // Encontrar el índice del campo "my_response"
-        const myResponsePattern = /("my_response":\s*")(.*?)(?=")/;
-        const updatedString = jsonString.replace(myResponsePattern, `$1${transcript.replace(/"/g, '\\"')}`);
-    
-        // Actualizar el contenido del textarea con id="chatInput1"
-        chatInput1.value = updatedString;
-        autoExpand(chatInput1);
-    };
+  recognition.onresult = (event) => {
+      let interimTranscript = '';
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+              finalTranscript += transcript;
+          } else {
+              interimTranscript += transcript;
+          }
+      }
+  };
 
-    recognition.onerror = (event) => {
-        console.error('Speech recognition error', event.error);
-        stopButton.classList.add('hidden');
-        talkButton.classList.remove('hidden');
-    };
-} else {
+  recognition.onend = () => {    
+      if (finalTranscript) {
+        // GRabar contenido en segundo text area
+        const chatInputText1 = document.getElementById('chatInputText1');
+        chatInputText1.value = finalTranscript;
+        autoExpand(chatInputText1);
+
+          // Obtener el contenido actual del textarea con id="chatInput1"
+          const chatInput1 = document.getElementById('chatInput1');
+          let jsonString = chatInput1.value;
+
+          // Encontrar el índice del campo "my_response"
+          const myResponsePattern = /("my_response":\s*")(.*?)(?=")/;
+          const updatedString = jsonString.replace(myResponsePattern, `$1${finalTranscript.replace(/"/g, '\\"')}`);
+
+          // Actualizar el contenido del textarea con id="chatInput1"
+          chatInput1.value = updatedString;
+          autoExpand(chatInput1);
+      }
+  };
+
+  recognition.onerror = (event) => {
+      console.error('Speech recognition error', event.error);
+      stopButton.classList.add('hidden');
+      talkButton.classList.remove('hidden');
+  };
+}
+else {
     console.warn('Este navegador no soporta la API de reconocimiento de voz.');
 }
