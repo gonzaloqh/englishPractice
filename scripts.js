@@ -241,33 +241,31 @@ if ('webkitSpeechRecognition' in window) {
   let finalTranscript = '';
 
   talkButton.addEventListener('click', () => {
-      finalTranscript = ''; // Reinicia el transcript final
+      finalTranscript = ''; // Reset the final transcript
       talkButton.classList.add('hidden');
       stopButton.classList.remove('hidden');
       recognition.start();
   });
 
   stopButton.addEventListener('click', () => {
-      stopButton.classList.add('hidden');
-      talkButton.classList.remove('hidden');
       recognition.stop();
   });
 
   recognition.onresult = (event) => {
-      let interimTranscript = '';
       for (let i = event.resultIndex; i < event.results.length; ++i) {
           const transcript = event.results[i][0].transcript;
           if (event.results[i].isFinal) {
               finalTranscript += transcript;
-          } else {
-              interimTranscript += transcript;
           }
       }
   };
 
-  recognition.onend = () => {    
+  recognition.onend = () => {
+      stopButton.classList.add('hidden');
+      talkButton.classList.remove('hidden');
+
       if (finalTranscript) {
-        // GRabar contenido en segundo text area
+        // Update the textarea with the transcribed text
         const chatInputText1 = document.getElementById('chatInputText1');
         chatInputText1.value = finalTranscript;
         autoExpand(chatInputText1);
@@ -282,7 +280,6 @@ if ('webkitSpeechRecognition' in window) {
       stopButton.classList.add('hidden');
       talkButton.classList.remove('hidden');
   };
-}
-else {
-    console.warn('Este navegador no soporta la API de reconocimiento de voz.');
+} else {
+    console.warn('This browser does not support the Speech Recognition API.');
 }
